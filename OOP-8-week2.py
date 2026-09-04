@@ -7,7 +7,7 @@ while("true"):
 
     a = int(input("Enter the value of a: "))
     b = int(input("Enter the value of b: "))
-
+(should have c = a + b or sm like that)
     if choice == "1":
         c = a + b
         print(c)
