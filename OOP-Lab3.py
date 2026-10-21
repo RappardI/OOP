@@ -1,3 +1,4 @@
+import pickle
 class Book:
     def __init__(self):
         self.book_id = ""
@@ -35,10 +36,11 @@ class Author:
         self.year_of_publication = input("Enter Year of Publication: ")
 
     def display_Author(self):
-        print(self.author_id)
-        print(self.name)
-        print(self.affiliation)
-        print(self.year_of_publication)
+        print(f'Author ID: {self.author_id}')
+        print(f'Name: {self.name}')
+        print(f'Affiliation: {self.affiliation}')
+        print(f'Year of Publication: {self.year_of_publication}')
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 class User:
@@ -66,10 +68,9 @@ class User:
         print(self.email_id)
         print(self.booksborrowed)
 
-
 Books = []
-Authors = []
 Users = []
+Authors = []
 
 while True:
     print("Welcome to Faculty")
@@ -86,29 +87,48 @@ while True:
     if choice == "1":
         book = Book()
         book.create_new_Book()
-        Books.append(book)
+        book_file = open("mybooks.dat", "ab")
+        pickle.dump(book, book_file)
+        book_file.close()
+
 
     elif choice == "2":
         author = Author()
         author.create_new_Author()
         Authors.append(author)
 
+        author_file = open("myauthors.dat", "wb")
+        pickle.dump(Authors, author_file)
+        author_file.close()
+
     elif choice == "3":
+        #TODO: Change to array
         user = User()
         user.create_new_User()
-        Users.append(user)
+        user_file = open("myusers.dat", "ab")
+        pickle.dump(user, user_file)
+        user_file.close()
 
     elif choice == "4":
-        for book in Books:
+        read_book_file = open("mybooks.dat", "rb")
+        display_books = pickle.load(read_book_file)
+        for book in display_books:
             book.display_Book()
+        read_book_file.close()
 
     elif choice == "5":
-        for author in Authors:
+
+        read_author_file = open("myauthors.dat", "rb")
+        display_authors = pickle.load(read_author_file)
+        for author in display_authors:
             author.display_Author()
+        read_author_file.close()
 
     elif choice == "6":
         for user in Users:
-            user.display_User()
+            read_user_file = open("myusers.dat", "rb")
+            display_user = pickle.load(read_user_file)
+            pickle.dump(display_user, user_file)
 
     elif choice == "7":
         break
