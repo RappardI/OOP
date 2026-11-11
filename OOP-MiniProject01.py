@@ -13,17 +13,36 @@ mycursor.execute("""
             CREATE TABLE IF NOT EXISTS Student (
             StudentID INT PRIMARY KEY,
             Name VARCHAR(50),
-            Department VARCHAR(50)
+            Department VARCHAR(50),
+            Major VARCHAR(50),
+            Course VARCHAR(50),
+            CGPA VARCHAR(50)
+            
         )
 """)
 print("Student Table created successfully")
+
+mycursor = mydb.cursor()
+
+mycursor.execute("""
+            CREATE TABLE IF NOT EXISTS Faculty (
+            FacultyID INT PRIMARY KEY,
+            Name VARCHAR(50),
+            Department VARCHAR(50),
+            Major VARCHAR(50),
+            Courses VARCHAR(50),
+            CGPA VARCHAR(50)
+            
+        )
+""")
+print("Faculty Table created successfully")
 
 
 def insert_student():
     sid = int(input("Enter Student ID: "))
     name = input("Enter Student Name: ")
     department = input("Enter Student Department: ")
-    sql = "INSERT INTO Student (StudentID, Name, Department) VALUES (%s, %s, %s)"
+    sql = "INSERT INTO Student VALUES (%s, %s, %s)"
     val = (sid, name, department)
     mycursor.execute(sql, val)
     mydb.commit()
@@ -31,8 +50,8 @@ def insert_student():
 
 
 def display_students():
-    cursor.execute("SELECT * FROM Student")
-    for row in cursor.fetchall():
+    mycursor.execute("SELECT * FROM Student")
+    for row in mycursor.fetchall():
         print(row)
 
 
@@ -45,17 +64,17 @@ def update_student():
     SET Name = %s, Department = %s
     WHERE StudentID = %s
     """
-    cursor.execute(sql, (name, department, sid))
+    mycursor.execute(sql, (name, department, sid))
     mydb.commit()
-    print("Record Updated!" if cursor.rowcount else "Record Not Found")
+    print("Record Updated!" if mycursor.rowcount else "Record Not Found")
 
 
 def delete_student():
     sid = int(input("Enter Student ID: "))
     sql = "DELETE FROM Student WHERE StudentID = %s"
-    cursor.execute(sql, (sid,))
+    mycursor.execute(sql, (sid,))
     mydb.commit()
-    print("Record Deleted!" if cursor.rowcount else "Record Not Found")
+    print("Record Deleted!" if mycursor.rowcount else "Record Not Found")
 
 
 def insert_faculty():
@@ -70,8 +89,8 @@ def insert_faculty():
 
 
 def display_facultys():
-    cursor.execute("SELECT * FROM Faculty")
-    for row in cursor.fetchall():
+    mycursor.execute("SELECT * FROM Faculty")
+    for row in mycursor.fetchall():
         print(row)
 
 
@@ -84,24 +103,24 @@ def update_faculty():
     SET Name = %s, Department = %s
     WHERE FacultyID = %s
     """
-    cursor.execute(sql, (name, department, sid))
+    mycursor.execute(sql, (name, department, sid))
     mydb.commit()
-    print("Record Updated!" if cursor.rowcount else "Record Not Found")
+    print("Record Updated!" if mycursor.rowcount else "Record Not Found")
 
 
 def delete_faculty():
     sid = int(input("Enter Faculty ID: "))
     sql = "DELETE FROM Faculty WHERE FacultyID = %s"
-    cursor.execute(sql, (sid,))
+    mycursor.execute(sql, (sid,))
     mydb.commit()
-    print("Record Deleted!" if cursor.rowcount else "Record Not Found")
+    print("Record Deleted!" if mycursor.rowcount else "Record Not Found")
 
 
 while True:
     print("\n1.Insert Student")
     print("2.Insert Faculty")
     print("3.Display Students")
-    print("4 Display Facultys")
+    print("4 Display Faculty")
     print("5.Update Student")
     print("6.Update Faculty")
     print("7.Delete Student")
@@ -128,7 +147,7 @@ while True:
         break
     else:
         print("Invalid Choice")
-    cursor.close()
+    mycursor.close()
     mydb.close()
     print("Database connection closed")
 
